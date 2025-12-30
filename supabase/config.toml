@@ -1,0 +1,4 @@
+project_id = "pcizlzfpjvpcdtwtmwla"
+
+[functions.stock-chat]
+verify_jwt = false
