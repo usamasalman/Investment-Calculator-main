@@ -486,20 +486,38 @@ export const generateRecommendations = (
   const scoredStocks = scoreStocks(profile);
   const recommendations = calculateAllocation(scoredStocks, profile, count, seed);
 
-  // Calculate portfolio summary
-  const totalInvestment = recommendations.reduce((sum, r) => sum + r.investmentAmount, 0);
-  const weightedReturn = recommendations.reduce(
+  // Calculate initial total investment (may be less than capital due to rounding)
+  const initialTotal = recommendations.reduce((sum, r) => sum + r.investmentAmount, 0);
+  
+  // If initial total is less than capital, scale up proportionally
+  let adjustedRecommendations = recommendations;
+  if (initialTotal < profile.capital && initialTotal > 0) {
+    const scaleFactor = profile.capital / initialTotal;
+    adjustedRecommendations = recommendations.map(r => {
+      const adjustedAmount = Math.round(r.investmentAmount * scaleFactor);
+      return {
+        ...r,
+        investmentAmount: adjustedAmount,
+        suggestedAllocation: (adjustedAmount / profile.capital) * 100,
+        suggestedShares: Math.floor(adjustedAmount / r.price)
+      };
+    });
+  }
+
+  // Recalculate portfolio summary with adjusted amounts
+  const totalInvestment = profile.capital; // Now exactly equals capital
+  const weightedReturn = adjustedRecommendations.reduce(
     (sum, r) => sum + (r.expectedReturn * r.suggestedAllocation / 100),
     0
   );
-  const dividendIncome = recommendations.reduce((sum, r) => {
+  const dividendIncome = adjustedRecommendations.reduce((sum, r) => {
     const yield_ = r.dividendYield || 0;
     return sum + (r.investmentAmount * yield_ / 100);
   }, 0);
 
-  // Sector diversification
+  // Sector diversification (need to recalculate with adjusted allocations)
   const sectorMap = new Map<string, number>();
-  recommendations.forEach((r) => {
+  adjustedRecommendations.forEach((r) => {
     const current = sectorMap.get(r.sector) || 0;
     sectorMap.set(r.sector, current + r.suggestedAllocation);
   });
@@ -510,12 +528,12 @@ export const generateRecommendations = (
 
   return {
     totalInvestment,
-    stockCount: recommendations.length,
+    stockCount: adjustedRecommendations.length,
     expectedAnnualReturn: weightedReturn,
     dividendIncome,
     riskLevel: getRiskLevelFromScore(profile.riskTolerance),
     sectorDiversification,
-    recommendations,
+    recommendations: adjustedRecommendations,
   };
 };
 
