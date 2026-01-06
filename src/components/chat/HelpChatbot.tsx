@@ -3,7 +3,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import { HelpCircle, Send, Bot, User, Sparkles, Loader2 } from 'lucide-react';
+import { Card } from '@/components/ui/card';
+import { HelpCircle, Send, Bot, User, Sparkles, Loader2, X, MessageCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import ReactMarkdown from 'react-markdown';
 
@@ -16,10 +17,11 @@ const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/help-chat`;
 
 export const HelpChatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [showPromo, setShowPromo] = useState(true);
   const [messages, setMessages] = useState<Message[]>([
     {
       role: 'assistant',
-      content: "👋 Hi! I'm your guide. I can help you understand how to use this tool, explain features like AI Picks, Profile settings, and guide you through the platform. What would you like to know?",
+      content: "May I help you?",
     },
   ]);
   const [input, setInput] = useState('');
@@ -135,7 +137,45 @@ export const HelpChatbot = () => {
   ];
 
   return (
-    <Sheet open={isOpen} onOpenChange={setIsOpen}>
+    <>
+      {showPromo && (
+        <Card className="fixed bottom-24 left-6 max-w-xs p-4 shadow-lg border border-border bg-background/95 backdrop-blur-sm z-40 animate-in slide-in-from-left-2">
+          <div className="flex items-start gap-3">
+            <div className="p-2 rounded-full bg-primary/10">
+              <MessageCircle className="w-4 h-4 text-primary" />
+            </div>
+            <div className="flex-1">
+              <p className="text-sm font-medium text-foreground mb-1">
+                Do you need help in profiling?
+              </p>
+              <p className="text-xs text-muted-foreground mb-3">
+                Chat with our AI assistant for guidance on setting up your investment preferences.
+              </p>
+              <div className="flex gap-2">
+                <Button
+                  size="sm"
+                  onClick={() => {
+                    setShowPromo(false);
+                    setIsOpen(true);
+                  }}
+                  className="text-xs h-7"
+                >
+                  Start Chat
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setShowPromo(false)}
+                  className="text-xs h-7 px-2"
+                >
+                  <X className="w-3 h-3" />
+                </Button>
+              </div>
+            </div>
+          </div>
+        </Card>
+      )}
+      <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger asChild>
         <Button
           className="fixed bottom-6 left-6 w-14 h-14 rounded-full shadow-lg bg-secondary hover:bg-secondary/80 text-secondary-foreground z-50 border border-border"
@@ -274,5 +314,6 @@ export const HelpChatbot = () => {
         </div>
       </SheetContent>
     </Sheet>
+    </>
   );
 };

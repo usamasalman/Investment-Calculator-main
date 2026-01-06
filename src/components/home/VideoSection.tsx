@@ -57,7 +57,7 @@ export const VideoSection = () => {
                     </div>
                     <div className="space-y-1">
                       <p className="text-lg font-semibold text-foreground">Getting Started Guide</p>
-                      <p className="text-sm text-muted-foreground">2 min tutorial</p>
+                      <p className="text-sm text-muted-foreground">4 min tutorial</p>
                     </div>
                   </div>
                   

@@ -10,6 +10,7 @@ import { Slider } from '@/components/ui/slider';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import { ArrowRight, ArrowLeft, Check, DollarSign, Shield, Target, Percent, Clock } from 'lucide-react';
+import { HelpChatbot } from '@/components/chat/HelpChatbot';
 import { 
   UserProfile, 
   InvestmentGoal, 
@@ -469,6 +470,7 @@ const Profile = () => {
           )}
         </div>
       </main>
+      <HelpChatbot />
     </div>
   );
 };
