@@ -4,7 +4,7 @@ import { Play, BookOpen, Target, Brain, TrendingUp, X } from 'lucide-react';
 import { useState } from 'react';
 
 // ⬇️ PUT YOUR VIDEO URL HERE ⬇️
-const VIDEO_URL = "/Video Project 2.mp4"; // Change this to your video path (e.g., "/videos/my-video.mp4" or "https://example.com/video.mp4")
+const VIDEO_URL = "https://www.youtube.com/embed/CWpFFB2W9nk?modestbranding=1&cc_load_policy=1&cc_lang_pref=en&rel=0"; // Change this to your YouTube embed URL
 
 const videoTopics = [
   {
@@ -75,14 +75,14 @@ export const VideoSection = () => {
                 </div>
               ) : (
                 <div className="absolute inset-0 bg-background">
-                  <video
+                  <iframe
                     src={VIDEO_URL}
-                    controls
-                    autoPlay
-                    className="w-full h-full object-contain"
-                  >
-                    Your browser does not support the video tag.
-                  </video>
+                    title="YouTube video player"
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowFullScreen
+                    className="w-full h-full"
+                  ></iframe>
                   <Button 
                     variant="outline" 
                     size="icon"
