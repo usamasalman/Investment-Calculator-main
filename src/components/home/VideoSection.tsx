@@ -4,7 +4,7 @@ import { Play, BookOpen, Target, Brain, TrendingUp, X } from 'lucide-react';
 import { useState } from 'react';
 
 // ⬇️ PUT YOUR VIDEO URL HERE ⬇️
-const VIDEO_URL = "/AIroboadvisory1.mp4"; // Change this to your video path (e.g., "/videos/my-video.mp4" or "https://example.com/video.mp4")
+const VIDEO_URL = "/Video Project 2.mp4"; // Change this to your video path (e.g., "/videos/my-video.mp4" or "https://example.com/video.mp4")
 
 const videoTopics = [
   {
